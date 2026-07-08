@@ -100,12 +100,12 @@ export default function TextHeart() {
         ctx.shadowColor = 'rgba(255, 77, 109, 0.6)';
         ctx.shadowBlur = 30;
         ctx.fillStyle = `rgba(255, 77, 109, ${centerAlpha})`;
-        ctx.fillText('pé Trân', centerX, centerY);
+        ctx.fillText('iu pé Trân', centerX, centerY);
         
         // Overlay brighter text
         ctx.shadowBlur = 0;
         ctx.fillStyle = `rgba(255, 143, 177, ${centerAlpha})`;
-        ctx.fillText('pé Trân', centerX, centerY);
+        ctx.fillText('iu pé Trân', centerX, centerY);
         
         ctx.restore();
       }
