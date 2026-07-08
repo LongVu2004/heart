@@ -19,6 +19,7 @@ export default function TextHeart() {
 
     let animationFrameId: number;
     let points: Point[] = [];
+    let centerAlpha = 0;
     const text = "i love you";
     const fontSize = 14;
 
@@ -38,7 +39,7 @@ export default function TextHeart() {
       // x = 16 sin^3(t)
       // y = -(13 cos(t) - 5 cos(2t) - 2 cos(3t) - cos(4t))
       
-      for (let t = 0; t < Math.PI * 2; t += 0.05) {
+      for (let t = 0; t < Math.PI * 2; t += 0.08) {
         const x = 16 * Math.pow(Math.sin(t), 3);
         const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
         
@@ -46,25 +47,23 @@ export default function TextHeart() {
           x: centerX + x * scale,
           y: centerY + y * scale,
           alpha: 0,
-          targetAlpha: 0.8 + Math.random() * 0.2,
+          targetAlpha: 0.9 + Math.random() * 0.1,
           delay: Math.random() * 2000
         });
       }
 
-      // Add inner layers
-      for (let s = 0.2; s < 1; s += 0.2) {
-          for (let t = 0; t < Math.PI * 2; t += 0.1) {
-            const x = 16 * Math.pow(Math.sin(t), 3);
-            const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-            
-            points.push({
-              x: centerX + x * scale * s,
-              y: centerY + y * scale * s,
-              alpha: 0,
-              targetAlpha: 0.4 + Math.random() * 0.4,
-              delay: Math.random() * 3000
-            });
-          }
+      // Add sparse inner layer
+      for (let t = 0; t < Math.PI * 2; t += 0.12) {
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+        
+        points.push({
+          x: centerX + x * scale * 0.6,
+          y: centerY + y * scale * 0.6,
+          alpha: 0,
+          targetAlpha: 0.5 + Math.random() * 0.3,
+          delay: Math.random() * 3000
+        });
       }
     };
 
@@ -84,6 +83,32 @@ export default function TextHeart() {
         ctx.fillStyle = `rgba(255, 77, 109, ${p.alpha})`;
         ctx.fillText(text, p.x - ctx.measureText(text).width / 2, p.y);
       });
+
+      // Center text
+      if (elapsed > 3000) {
+        centerAlpha += (1 - centerAlpha) * 0.02;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const fontSizeBig = Math.min(canvas.width, canvas.height) / 22;
+        
+        ctx.save();
+        ctx.font = `600 ${fontSizeBig}px "Inter", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Glow effect
+        ctx.shadowColor = 'rgba(255, 77, 109, 0.6)';
+        ctx.shadowBlur = 30;
+        ctx.fillStyle = `rgba(255, 77, 109, ${centerAlpha})`;
+        ctx.fillText('pé Trân', centerX, centerY);
+        
+        // Overlay brighter text
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = `rgba(255, 143, 177, ${centerAlpha})`;
+        ctx.fillText('pé Trân', centerX, centerY);
+        
+        ctx.restore();
+      }
 
       animationFrameId = requestAnimationFrame(draw);
     };
